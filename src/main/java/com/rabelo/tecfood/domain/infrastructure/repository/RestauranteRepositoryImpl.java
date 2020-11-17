@@ -31,13 +31,14 @@ public class RestauranteRepositoryImpl implements RestauranteRepository{
 
 	@Override
 	public Restaurante buscarRestaurante(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return entityManager.find(Restaurante.class, id);
 	}
 
 	@Override
 	public void remover(Long id) {
-		// TODO Auto-generated method stub
+		
+		entityManager.remove(buscarRestaurante(id));
 		
 	}
 
