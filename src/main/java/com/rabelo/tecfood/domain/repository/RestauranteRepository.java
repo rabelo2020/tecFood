@@ -10,7 +10,7 @@ import com.rabelo.tecfood.domain.model.Restaurante;
 public interface RestauranteRepository {
 	
 	List<Restaurante> listar();
-	void salvarRestaurante(Restaurante restaurante);
+	Restaurante salvarRestaurante(Restaurante restaurante);
 	Restaurante buscarRestaurante(Long id);
 	void remover(Long id);
 	
