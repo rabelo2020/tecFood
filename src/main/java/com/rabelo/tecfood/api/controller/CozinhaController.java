@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.repository.CozinhaRepository;
 import com.rabelo.tecfood.domain.service.CadastroCozinhaService;
-import com.rabelo.tecfood.domain.service.exception.CozinhaExistenteException;
+import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
 
 @RestController
 @RequestMapping(value = "/cozinhas", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
@@ -46,16 +46,16 @@ public class CozinhaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Cozinha cozinha) {
+	public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
 
 		try {
 			Cozinha cozinhasalva = cadastrocozinhaService.salva(cozinha);
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(cozinhasalva);
 
-		} catch (CozinhaExistenteException e) {
+		} catch (ItemExistenteException e) {
 
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
 

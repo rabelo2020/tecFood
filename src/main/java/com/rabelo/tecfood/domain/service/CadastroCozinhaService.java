@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.repository.CozinhaRepository;
-import com.rabelo.tecfood.domain.service.exception.CozinhaExistenteException;
+import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
 
 @Service
 public class CadastroCozinhaService {
@@ -18,7 +18,7 @@ public class CadastroCozinhaService {
 		
 		if (cozinhaAtual != null) {
 			
-			throw new CozinhaExistenteException("Cozinha já existente no BD!");
+			throw new ItemExistenteException("Cozinha já existente no BD!");
 		}		
 		return cozinhaRepository.save(cozinha);
 		

@@ -7,5 +7,7 @@ import com.rabelo.tecfood.domain.model.Estado;
 
 @Repository
 public interface EstadoRepository extends JpaRepository<Estado, Long>{
+	
+	Estado findByNome(String nome);
 
 }

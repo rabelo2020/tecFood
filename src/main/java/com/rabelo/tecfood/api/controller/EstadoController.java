@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rabelo.tecfood.domain.model.Estado;
 import com.rabelo.tecfood.domain.repository.EstadoRepository;
+import com.rabelo.tecfood.domain.service.CadastroCozinhaService;
+import com.rabelo.tecfood.domain.service.CadastroEstadoService;
+import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
 
 @RestController
 @RequestMapping("/estados")
@@ -26,6 +29,9 @@ public class EstadoController {
 
 	@Autowired
 	private EstadoRepository estadoRepository;
+
+	@Autowired
+	private CadastroEstadoService cadastroEstadoService;
 
 	@GetMapping
 	public List<Estado> lista() {
@@ -48,9 +54,15 @@ public class EstadoController {
 	@PostMapping
 	public ResponseEntity<Estado> salvar(@RequestBody Estado estado) {
 
-		Estado estadoSalvo = estadoRepository.save(estado);
+		try {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(estadoSalvo);
+			Estado estadoSalvo = cadastroEstadoService.salvar(estado);
+			return ResponseEntity.status(HttpStatus.CREATED).body(estadoSalvo);
+
+		} catch (ItemExistenteException e) {
+			
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
 	}
 
 	@PutMapping("/{id}")
@@ -79,7 +91,7 @@ public class EstadoController {
 			}
 
 			return ResponseEntity.notFound().build();
-			
+
 		} catch (DataIntegrityViolationException e) {
 
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
