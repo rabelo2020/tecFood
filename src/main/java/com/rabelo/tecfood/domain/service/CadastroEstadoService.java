@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.rabelo.tecfood.domain.model.Estado;
 import com.rabelo.tecfood.domain.repository.EstadoRepository;
-import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
+import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 
 @Service
 public class CadastroEstadoService {
@@ -17,7 +17,7 @@ public class CadastroEstadoService {
 		Estado estadoId = estadoRepository.findByNome(estado.getNome());
 		
 		if (estadoId != null) {
-			throw new ItemExistenteException("Nome do Estado já existe no BD !");
+			throw new EntidadeJaCadastradaException("Nome do Estado já existe no BD !");
 		}
 		return estadoRepository.save(estado);
 	}

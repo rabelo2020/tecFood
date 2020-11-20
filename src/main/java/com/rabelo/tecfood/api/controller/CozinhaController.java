@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.repository.CozinhaRepository;
 import com.rabelo.tecfood.domain.service.CadastroCozinhaService;
-import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
+import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 
 @RestController
-@RequestMapping(value = "/cozinhas", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/cozinhas",
+produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 public class CozinhaController {
 
 	@Autowired
@@ -53,7 +54,7 @@ public class CozinhaController {
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(cozinhasalva);
 
-		} catch (ItemExistenteException e) {
+		} catch (EntidadeJaCadastradaException e) {
 
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
@@ -88,7 +89,9 @@ public class CozinhaController {
 			}
 
 			return ResponseEntity.notFound().build();
+			
 		} catch (DataIntegrityViolationException e) {
+			
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}

@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rabelo.tecfood.domain.model.Estado;
 import com.rabelo.tecfood.domain.repository.EstadoRepository;
-import com.rabelo.tecfood.domain.service.CadastroCozinhaService;
 import com.rabelo.tecfood.domain.service.CadastroEstadoService;
-import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
+import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 
 @RestController
 @RequestMapping("/estados")
@@ -59,7 +58,7 @@ public class EstadoController {
 			Estado estadoSalvo = cadastroEstadoService.salvar(estado);
 			return ResponseEntity.status(HttpStatus.CREATED).body(estadoSalvo);
 
-		} catch (ItemExistenteException e) {
+		} catch (EntidadeJaCadastradaException e) {
 			
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}

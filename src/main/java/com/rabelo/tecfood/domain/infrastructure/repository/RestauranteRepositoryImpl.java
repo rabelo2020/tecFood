@@ -1,19 +1,10 @@
 package com.rabelo.tecfood.domain.infrastructure.repository;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Component;
 
-import com.rabelo.tecfood.domain.model.Restaurante;
-import com.rabelo.tecfood.domain.repository.RestauranteRepository;
-
 @Component
-public class RestauranteRepositoryImpl implements RestauranteRepository{
-	
+public class RestauranteRepositoryImpl{// implements RestauranteRepository{
+/*	
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -45,5 +36,5 @@ public class RestauranteRepositoryImpl implements RestauranteRepository{
 		entityManager.remove(buscarRestaurante(id));
 		
 	}
-
+  */
 }

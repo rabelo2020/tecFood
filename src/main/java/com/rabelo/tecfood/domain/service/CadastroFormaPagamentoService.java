@@ -12,7 +12,7 @@ import com.rabelo.tecfood.domain.model.FormaPagamento;
 import com.rabelo.tecfood.domain.repository.FormaPagamentoRepository;
 import com.rabelo.tecfood.domain.service.exception.EntidadeEmUsoException;
 import com.rabelo.tecfood.domain.service.exception.EntidadeNaoEncontradaException;
-import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
+import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 
 @Service
 public class CadastroFormaPagamentoService {
@@ -24,7 +24,7 @@ public class CadastroFormaPagamentoService {
 		FormaPagamento formaPagamentoAtual = formaPagamentoRepository.findByNome(formaPagamento.getNome());
 
 		if (formaPagamentoAtual != null) {
-			throw new ItemExistenteException("Já existente !");
+			throw new EntidadeJaCadastradaException("Já existente !");
 
 		}
 

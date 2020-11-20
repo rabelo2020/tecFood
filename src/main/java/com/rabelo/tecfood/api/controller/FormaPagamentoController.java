@@ -20,7 +20,7 @@ import com.rabelo.tecfood.domain.repository.FormaPagamentoRepository;
 import com.rabelo.tecfood.domain.service.CadastroFormaPagamentoService;
 import com.rabelo.tecfood.domain.service.exception.EntidadeEmUsoException;
 import com.rabelo.tecfood.domain.service.exception.EntidadeNaoEncontradaException;
-import com.rabelo.tecfood.domain.service.exception.ItemExistenteException;
+import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 
 @RestController
 @RequestMapping("/formaPagamentos")
@@ -53,7 +53,7 @@ public class FormaPagamentoController {
 			FormaPagamento pagamento = cadastroFormaPagamentoService.salvar(formaPagamento);
 			return ResponseEntity.status(HttpStatus.CREATED).body(pagamento);
 
-		} catch (ItemExistenteException e) {
+		} catch (EntidadeJaCadastradaException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 
