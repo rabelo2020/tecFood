@@ -1,5 +1,7 @@
 package com.rabelo.tecfood.domain.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,17 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
+	
 	public Restaurante salvar(Restaurante restaurante) {
-		// Long cozinhaId = restaurante.getCozinha().getId();
+		
+		BigDecimal valorTaxaAtual = new BigDecimal(2.00);
+		
 		Restaurante restauranteAtual = restauranteRepository.findByNome(restaurante.getNome().trim());
 		Cozinha cozinhaAtual = cozinhaRepository.findById(restaurante.getCozinha().getId()).orElse(null);
 
-		if (restauranteAtual != null) {
+		if (restauranteAtual != null || restaurante.getTaxaFrete().compareTo(valorTaxaAtual) < 0) {
 
-			throw new EntidadeJaCadastradaException("Nome do Restaurante já existente no Cadastro!");
+			throw new EntidadeJaCadastradaException("Nome do Restaurante já existente no Cadastro!\n Valor da Taxa não pode ser menor R$2,00");
 
 		}
 		if (cozinhaAtual == null) {

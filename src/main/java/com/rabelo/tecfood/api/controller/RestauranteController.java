@@ -1,17 +1,20 @@
 package com.rabelo.tecfood.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rabelo.tecfood.domain.model.Restaurante;
@@ -29,8 +32,6 @@ public class RestauranteController {
 
 	@Autowired
 	private CadastroRestauranteService cadastroRestauranteService;
-	
-	
 
 	@GetMapping
 	public List<Restaurante> listar() {
@@ -47,7 +48,7 @@ public class RestauranteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Restaurante> salvar(@RequestBody Restaurante restaurante) {
+	public ResponseEntity<?> salvar(@RequestBody Restaurante restaurante) {
 
 		try {
 			Restaurante restauranteSalvo = cadastroRestauranteService.salvar(restaurante);
@@ -55,11 +56,11 @@ public class RestauranteController {
 
 		} catch (EntidadeJaCadastradaException e) {
 
-			return ResponseEntity.notFound().build();
-			
-		}catch (EntidadeNaoEncontradaException e) {
-			
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.badRequest().body(e.getMessage());
+
+		} catch (EntidadeNaoEncontradaException e) {
+
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
 
@@ -78,12 +79,35 @@ public class RestauranteController {
 		} catch (EntidadeJaCadastradaException e) {
 
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-			
-		}catch (EntidadeNaoEncontradaException e) {
-			
+
+		} catch (EntidadeNaoEncontradaException e) {
+
 			return ResponseEntity.noContent().build();
 		}
 
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
+			@RequestBody Map<String, Object> camposRestaurante) {
+
+		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
+		
+		if (restauranteAtual == null) {
+			return ResponseEntity.notFound().build();
+		}
+		camposRestaurante.forEach((nomeCampo, valorCampo) -> {
+			System.out.println(nomeCampo + ": " + valorCampo);
+			
+			merge(camposRestaurante, restauranteAtual);
+		});
+		return ResponseEntity.ok().build();
+
+	}
+
+	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteAtual) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@DeleteMapping("/{id}")

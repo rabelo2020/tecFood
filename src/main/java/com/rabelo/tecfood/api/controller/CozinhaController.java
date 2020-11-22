@@ -47,7 +47,7 @@ public class CozinhaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
+	public ResponseEntity<?> salvar(@RequestBody Cozinha cozinha) {
 
 		try {
 			Cozinha cozinhasalva = cadastrocozinhaService.salva(cozinha);
@@ -56,7 +56,7 @@ public class CozinhaController {
 
 		} catch (EntidadeJaCadastradaException e) {
 
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.badRequest().body(e.getLocalizedMessage());
 		}
 	}
 
