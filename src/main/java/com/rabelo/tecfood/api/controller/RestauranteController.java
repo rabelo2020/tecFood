@@ -99,7 +99,7 @@ public class RestauranteController {
 					/* Habilitando o field "campo" q está como private para, acessivel */
 				field.setAccessible(true);
 				
-		/* Buscar ou "get" no valor da Propiedade "field" em restauranteOrigem, e setar o valor no campo field */
+		/* Buscar ou  faz um "get" em restauranteOrigem, referente ao valor do field, e setar o valor no campo field */
 				Object novoValorCampo = ReflectionUtils.getField(field, restauranteOrigem);			
 					
 					//  Atribui um valor na Propiedade campo "field", no objeto, restauranteDestino o valor "novoValorCampo" 
