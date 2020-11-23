@@ -21,20 +21,30 @@ public class CadastroRestauranteService {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+	
+	public Restaurante atualizar(Long id, Restaurante restauranteClient) {
+		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
+
+		if (restauranteAtual != null) {
+
+			BeanUtils.copyProperties(restauranteClient, restauranteAtual, "id");
+			Restaurante restauranteSalvo = salvar(restauranteAtual);
+			return restauranteSalvo;
+
+		}
+
+		return restauranteAtual;
+	}
 
 	
 	public Restaurante salvar(Restaurante restaurante) {
+		//Restaurante restauranteAtual = restauranteRepository.findByNome(restaurante.getNome().trim());
 		
 		BigDecimal valorTaxaAtual = new BigDecimal(2.00);
-		
-		Restaurante restauranteAtual = restauranteRepository.findByNome(restaurante.getNome().trim());
 		Cozinha cozinhaAtual = cozinhaRepository.findById(restaurante.getCozinha().getId()).orElse(null);
 
-		if (restauranteAtual != null || restaurante.getTaxaFrete().compareTo(valorTaxaAtual) < 0) {
-
-			throw new EntidadeJaCadastradaException("Nome do Restaurante já existente no Cadastro!\n Valor da Taxa não pode ser menor R$2,00");
-
-		}
+		
+		 
 		if (cozinhaAtual == null) {
 			throw new EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!");
 		}
@@ -42,17 +52,6 @@ public class CadastroRestauranteService {
 
 	}
 
-	public Restaurante atualizar(Long id, Restaurante restauranteClient) {
-		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
 
-		if (restauranteAtual != null) {
-
-			BeanUtils.copyProperties(restauranteClient, restauranteAtual, "id");
-			return salvar(restauranteAtual);
-
-		}
-
-		return restauranteAtual;
-	}
 
 }

@@ -1,11 +1,14 @@
 package com.rabelo.tecfood.api.controller;
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabelo.tecfood.domain.model.Restaurante;
 import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.service.CadastroRestauranteService;
 import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 import com.rabelo.tecfood.domain.service.exception.EntidadeNaoEncontradaException;
+
+import javassist.tools.reflect.Reflection;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -64,6 +70,44 @@ public class RestauranteController {
 		}
 	}
 
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
+			@RequestBody Map<String, Object> camposRestaurante) {
+
+		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
+
+		if (restauranteAtual == null) {
+			return ResponseEntity.notFound().build();
+		}
+		merge(camposRestaurante, restauranteAtual);
+		atualizar(id, restauranteAtual);
+
+		return ResponseEntity.ok(restauranteAtual);
+
+	}
+
+	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteDestino) {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		//Converter todas as propiedades camposRestaurante, no tipo de cada campo de Restaurante.class 
+				Restaurante restauranteOrigem = objectMapper.convertValue(camposRestaurante, Restaurante.class);
+				
+				camposRestaurante.forEach((nomeCampo, valorCampo) -> {
+					
+					/* Busca o nome da Propiedade em nomeCampo */
+				Field field = ReflectionUtils.findField(Restaurante.class, nomeCampo);
+					/* Habilitando o field "campo" q está como private para, acessivel */
+				field.setAccessible(true);
+				
+		/* Buscar ou "get" no valor da Propiedade "field" em restauranteOrigem, e setar o valor no campo field */
+				Object novoValorCampo = ReflectionUtils.getField(field, restauranteOrigem);			
+					
+					//  Atribui um valor na Propiedade campo "field", no objeto, restauranteDestino o valor "novoValorCampo" 
+					 ReflectionUtils.setField(field, restauranteDestino, novoValorCampo);			
+			
+		});
+	}
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restauranteClient) {
 
@@ -85,29 +129,6 @@ public class RestauranteController {
 			return ResponseEntity.noContent().build();
 		}
 
-	}
-
-	@PatchMapping("/{id}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long id,
-			@RequestBody Map<String, Object> camposRestaurante) {
-
-		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
-		
-		if (restauranteAtual == null) {
-			return ResponseEntity.notFound().build();
-		}
-		camposRestaurante.forEach((nomeCampo, valorCampo) -> {
-			System.out.println(nomeCampo + ": " + valorCampo);
-			
-			merge(camposRestaurante, restauranteAtual);
-		});
-		return ResponseEntity.ok().build();
-
-	}
-
-	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteAtual) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@DeleteMapping("/{id}")
