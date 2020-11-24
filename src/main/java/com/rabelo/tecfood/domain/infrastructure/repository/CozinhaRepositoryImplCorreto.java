@@ -17,7 +17,7 @@ import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.repository.CozinhaRepository;
 
 @Component
-public class CozinhaRepositoryImpl {
+public class CozinhaRepositoryImplCorreto {
 	
 	/*
 	@PersistenceContext

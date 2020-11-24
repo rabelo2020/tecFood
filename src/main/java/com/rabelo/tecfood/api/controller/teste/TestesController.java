@@ -25,6 +25,16 @@ public class TestesController {
 
 	@Autowired
 	private RestaurantesRepository restaurantesRepository;
+	
+	@GetMapping("/buscar-jpql-nome-taxaInicial-taxaFinal")
+	public List<Restaurante> buscarNomeTaxaInicialTaxaFinal(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
+		return restaurantesRepository.find(nome, taxaInicial, taxaFinal);
+	}
+	
+	@GetMapping("/buscar-por-nome-query")
+	public List<Restaurante> buscarNomeQuery(String nome, Long id){
+		return restaurantesRepository.consultarPorNome(nome, id);
+	}
 
 	@GetMapping("/buscar-count-cozinha")
 	public int quantidadeCozinhas(Long cozinha) {

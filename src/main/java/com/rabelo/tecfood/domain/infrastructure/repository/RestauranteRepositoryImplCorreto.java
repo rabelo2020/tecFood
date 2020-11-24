@@ -3,7 +3,7 @@ package com.rabelo.tecfood.domain.infrastructure.repository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RestauranteRepositoryImpl{// implements RestauranteRepository{
+public class RestauranteRepositoryImplCorreto{// implements RestauranteRepository{
 /*	
 	@PersistenceContext
 	private EntityManager entityManager;
