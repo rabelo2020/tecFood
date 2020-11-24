@@ -21,7 +21,7 @@ public class CadastroRestauranteService {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
-	
+
 	public Restaurante atualizar(Long id, Restaurante restauranteClient) {
 		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
 
@@ -36,22 +36,20 @@ public class CadastroRestauranteService {
 		return restauranteAtual;
 	}
 
-	
 	public Restaurante salvar(Restaurante restaurante) {
-		//Restaurante restauranteAtual = restauranteRepository.findByNome(restaurante.getNome().trim());
-		
-		BigDecimal valorTaxaAtual = new BigDecimal(2.00);
-		Cozinha cozinhaAtual = cozinhaRepository.findById(restaurante.getCozinha().getId()).orElse(null);
+		/*
+		 * Cozinha cozinhaAtual =
+		 * cozinhaRepository.findById(restaurante.getCozinha().getId()).orElse(null); if
+		 * (cozinhaAtual == null) { throw new
+		 * EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!"
+		 * ); }
+		 */
+		Cozinha cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId())
+				.orElseThrow(() -> new EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!"));
 
-		
-		 
-		if (cozinhaAtual == null) {
-			throw new EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!");
-		}
+		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
 
 	}
-
-
 
 }
