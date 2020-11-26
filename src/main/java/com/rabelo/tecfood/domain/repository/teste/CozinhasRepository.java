@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.rabelo.tecfood.domain.model.Cozinha;
 
 @Repository
-public interface CozinhasRepository extends JpaRepository<Cozinha, Long>{
+public interface CozinhasRepository extends CustomJpaRepository<Cozinha, Long>{
 	
 	//List<Cozinha> buscarPorNome(String nome);
 	List<Cozinha> findByNomeContaining(String nome);

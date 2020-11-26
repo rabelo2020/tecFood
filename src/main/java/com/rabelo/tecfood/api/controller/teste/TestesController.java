@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,31 @@ public class TestesController {
 	@Autowired
 	private RestaurantesRepository restaurantesRepository;
 	
+	@GetMapping("/buscar-primeiro-cozinha")
+	public Optional<Cozinha> buscarUnicaCozinha() {
+
+		return cozinhaRepository.buscarPrimeiro();
+	}
+	
+	@GetMapping("/buscar-primeiro-restaurante")
+	public Optional<Restaurante> buscarUnicoRestaurante() {
+
+		return restaurantesRepository.buscarPrimeiro();
+	}
+
+	@GetMapping("/buscar-com-frete-gratis")
+	public List<Restaurante> restauranteComFreteGratis(String nome) {
+
+		return restaurantesRepository.findComFreteGratis(nome);
+	}
+
 	@GetMapping("/buscar-jpql-nome-taxaInicial-taxaFinal")
 	public List<Restaurante> buscarNomeTaxaInicialTaxaFinal(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal) {
 		return restaurantesRepository.find(nome, taxaInicial, taxaFinal);
 	}
-	
+
 	@GetMapping("/buscar-por-nome-query")
-	public List<Restaurante> buscarNomeQuery(String nome, Long id){
+	public List<Restaurante> buscarNomeQuery(String nome, Long id) {
 		return restaurantesRepository.consultarPorNome(nome, id);
 	}
 
