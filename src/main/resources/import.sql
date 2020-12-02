@@ -35,6 +35,9 @@ insert into Restaurante(nome, taxa_frete, cozinha_id) values ("Restaurate Baiahn
 insert into Restaurante(nome, taxa_frete, cozinha_id) values ("Restaurate New York", 17.92, 3);
 insert into Restaurante(nome, taxa_frete, cozinha_id) values ("Restaurate Carioca ", 2.98, 2);
 insert into Restaurante(nome, taxa_frete, cozinha_id) values ("Restaurate Japa", 7.03, 1);
+insert into Restaurante(nome, taxa_frete, cozinha_id) values ("Comida Nordestina", 2.52, 2);
+
+
 
 
 
