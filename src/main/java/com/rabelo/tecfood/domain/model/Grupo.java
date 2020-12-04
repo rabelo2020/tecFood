@@ -1,6 +1,5 @@
 package com.rabelo.tecfood.domain.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
@@ -18,24 +18,17 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Usuario {
+public class Grupo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
-	
 	private String nome;
-	private String email;
-	private String senha;
-	
-	//@CreationTimestamp
-	//@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDate dataCadastro;
 	
 	@ManyToMany
-	@JoinTable(name="usuario_grupo", joinColumns = @JoinColumn(name="usuario_id")
-	               , inverseJoinColumns = @JoinColumn(name="grupo_id"))
-	private List<Grupo> grupos = new ArrayList<>();
+	@JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name="grupo_id"),
+	              inverseJoinColumns = @JoinColumn(name="permissao_id"))
+	private List<Permissao> permissoes = new ArrayList<>();
 
 }

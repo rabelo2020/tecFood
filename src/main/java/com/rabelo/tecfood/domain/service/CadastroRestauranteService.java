@@ -28,7 +28,7 @@ public class CadastroRestauranteService {
 		if (restauranteAtual != null) {
 
 	BeanUtils.copyProperties(restauranteClient, restauranteAtual, 
-			"id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+			"id", "formaPagamento", "endereco", "dataCadastro", "produtos");
 			Restaurante restauranteSalvo = salvar(restauranteAtual);
 			return restauranteSalvo;
 

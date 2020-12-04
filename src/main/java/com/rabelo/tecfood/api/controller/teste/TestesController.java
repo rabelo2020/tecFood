@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,18 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.model.Restaurante;
+import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.repository.teste.CozinhasRepository;
-import com.rabelo.tecfood.domain.repository.teste.RestaurantesRepository;
 
 @RestController
 @RequestMapping("testes")
 public class TestesController {
 
+	
 	@Autowired
 	private CozinhasRepository cozinhaRepository;
 
 	@Autowired
-	private RestaurantesRepository restaurantesRepository;
+	private RestauranteRepository restaurantesRepository;
 	
 	@GetMapping("/buscar-primeiro-cozinha")
 	public Optional<Cozinha> buscarUnicaCozinha() {
@@ -97,4 +97,6 @@ public class TestesController {
 		return ResponseEntity.ok(cozinha);
 
 	}
+	
+	
 }

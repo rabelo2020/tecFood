@@ -1,4 +1,4 @@
-package com.rabelo.tecfood.domain.infrastructure.repository.teste;
+package com.rabelo.tecfood.domain.infrastructure.repository;
 
 import static com.rabelo.tecfood.domain.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
 import static com.rabelo.tecfood.domain.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
@@ -17,22 +17,22 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.rabelo.tecfood.domain.model.Restaurante;
+import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.repository.teste.RestauranteRepositoryQueries;
-import com.rabelo.tecfood.domain.repository.teste.RestaurantesRepository;
 
-@Repository
-public class RestaurantesRepositoryImpl implements RestauranteRepositoryQueries {
+@Component
+public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries{
 
 	@PersistenceContext
 	private EntityManager entityManager;
 	
 	@Autowired
 	@Lazy
-	private RestaurantesRepository restaurantesRepository; 
+	private RestauranteRepository restauranteRepository; 
 
 	@Override
 	public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
@@ -73,8 +73,7 @@ public class RestaurantesRepositoryImpl implements RestauranteRepositoryQueries 
 	@Override
 	public List<Restaurante> findComFreteGratis(String nome) {
 		
-		return restaurantesRepository
+		return restauranteRepository
 				.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
 	}
-
 }
