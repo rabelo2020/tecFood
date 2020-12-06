@@ -60,7 +60,7 @@ public class Restaurante {
 	@UpdateTimestamp
 	private LocalDateTime dataAtualizacao;
 
-	@JsonIgnore
+	//@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 

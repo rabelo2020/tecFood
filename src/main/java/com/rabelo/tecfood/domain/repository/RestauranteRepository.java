@@ -17,7 +17,7 @@ import com.rabelo.tecfood.domain.repository.teste.RestauranteRepositoryQueries;
 public interface RestauranteRepository extends CustomJpaRepository<Restaurante, Long>
             , RestauranteRepositoryQueries, JpaSpecificationExecutor<Restaurante>{
 	
-	@Query("from Restaurante r join fetch r.cozinha join fetch r.formaPagamento")
+	@Query("from Restaurante r join fetch r.cozinha join fetch r.formaPagamento join fetch r.endereco")
 	List<Restaurante> findAll();
 		
 	@Query("from Restaurante where nome like %:nome% and cozinha.id= :id")

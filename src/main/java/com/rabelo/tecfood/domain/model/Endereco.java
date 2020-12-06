@@ -30,7 +30,7 @@ public class Endereco {
 	@Column(name = "endereco_bairro")
 	private String bairro;	
 	  
-	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "endereco_cidade_id")
 	private Cidade cidade;
