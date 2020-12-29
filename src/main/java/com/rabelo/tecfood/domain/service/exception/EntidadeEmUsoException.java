@@ -1,6 +1,7 @@
 package com.rabelo.tecfood.domain.service.exception;
 
-public class EntidadeEmUsoException extends RuntimeException{
+//@ResponseStatus(HttpStatus.CONFLICT)
+public class EntidadeEmUsoException extends NegocioException{
 
 	private static final long serialVersionUID = 1L;
 	

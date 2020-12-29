@@ -29,4 +29,5 @@ public class Estado {
 	@JsonIgnore
 	@OneToMany(mappedBy = "estado")
 	private List<Cidade> cidades = new ArrayList<>();
-}
+	
+	}

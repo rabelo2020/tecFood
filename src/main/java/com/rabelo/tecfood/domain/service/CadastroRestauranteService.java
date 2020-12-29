@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
@@ -12,9 +14,11 @@ import com.rabelo.tecfood.domain.repository.CozinhaRepository;
 import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException;
 import com.rabelo.tecfood.domain.service.exception.EntidadeNaoEncontradaException;
+import com.rabelo.tecfood.domain.service.exception.RestauranteNaoEncontradaException;
 
 @Service
 public class CadastroRestauranteService {
+	private static final String MSG_RESTAURANTE_EM_USO = "Restaurante está em uso %d !";
 
 	@Autowired
 	private RestauranteRepository restauranteRepository;
@@ -22,34 +26,49 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
-	public Restaurante atualizar(Long id, Restaurante restauranteClient) {
-		Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
+	@Autowired
+	private CadastroCozinhaService cadastroCozinhaService;
 
-		if (restauranteAtual != null) {
-
-	BeanUtils.copyProperties(restauranteClient, restauranteAtual, 
-			"id", "formaPagamento", "endereco", "dataCadastro", "produtos");
-			Restaurante restauranteSalvo = salvar(restauranteAtual);
-			return restauranteSalvo;
-
-		}
-
-		return restauranteAtual;
-	}
+	/*
+	 * public Restaurante atualizar(Long id, Restaurante restauranteClient) {
+	 * Restaurante restauranteAtual =
+	 * restauranteRepository.findById(id).orElse(null);
+	 * 
+	 * if (restauranteAtual != null) {
+	 * 
+	 * BeanUtils.copyProperties(restauranteClient, restauranteAtual, "id",
+	 * "formaPagamento", "endereco", "dataCadastro", "produtos"); Restaurante
+	 * restauranteSalvo = salvar(restauranteAtual); return restauranteSalvo;
+	 * 
+	 * }
+	 * 
+	 * return restauranteAtual; }
+	 */
 
 	public Restaurante salvar(Restaurante restaurante) {
-		/*
-		 * Cozinha cozinhaAtual =
-		 * cozinhaRepository.findById(restaurante.getCozinha().getId()).orElse(null); if
-		 * (cozinhaAtual == null) { throw new
-		 * EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!"
-		 * ); }
-		 */
-		Cozinha cozinha = cozinhaRepository.findById(restaurante.getCozinha().getId())
-				.orElseThrow(() -> new EntidadeNaoEncontradaException("Código de Cozinha não existente no Cadastro!"));
+
+		Long cozinhaId = restaurante.getCozinha().getId();
+		Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
 		restaurante.setCozinha(cozinha);
 		return restauranteRepository.save(restaurante);
+
+	}
+
+	public Restaurante buscarOuFalhar(Long id) {
+		return restauranteRepository.findById(id).orElseThrow(() -> new RestauranteNaoEncontradaException(id));
+	}
+
+	public void excluir(Long id) {
+		try {
+			restauranteRepository.deleteById(id);
+
+		} catch (EmptyResultDataAccessException e) {
+			throw new RestauranteNaoEncontradaException(id);
+
+		} catch (DataIntegrityViolationException e) {
+			throw new RestauranteNaoEncontradaException(String.format(MSG_RESTAURANTE_EM_USO, id));
+		}
 
 	}
 

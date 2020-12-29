@@ -40,6 +40,8 @@ insert  into Estado(nome) values ("Ceara");
 insert  into Estado(nome) values ("Rio Grande do Sul");
 insert  into Estado(nome) values ("Goias");
 insert  into Estado(nome) values ("Bahia");
+insert  into Estado(nome) values ("Pará");
+insert  into Estado(nome) values ("Mato Grosso");
 
 insert into forma_pagamento(nome) values("Cartão Debito");
 insert into forma_pagamento(nome) values("Cartão de Credito");
@@ -57,7 +59,7 @@ insert into Cidade(nome, estado_id) values("Cedral", 1);
 insert into Cidade(nome, estado_id) values("Campinas", 4);
 insert into Cidade(nome, estado_id) values("Teresopolis", 2);
 insert into Cidade(nome, estado_id) values("São Paulo", 4);
-insert into Cidade(nome, estado_id) values("Fortaleza", 5);
+insert into Cidade(nome, estado_id) values("Cuiabá", 10);
 
 
 insert into Restaurante(nome, taxa_frete, cozinha_id, endereco_bairro, endereco_cep, endereco_complemento, endereco_logradouro, endereco_numero, endereco_cidade_id, data_cadastro, data_atualizacao) values ("Comida Goiana", 2.52, 2, "Campo Grande", "23073-500", "Dois Andares", "Rua Cristalandia", "35", 3, utc_timestamp, utc_timestamp);

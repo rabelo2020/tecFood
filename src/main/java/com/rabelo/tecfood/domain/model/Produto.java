@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,9 +31,11 @@ public class Produto {
 	private BigDecimal preco;
 	private boolean ativo;
 	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "restaurante_id")
-	private Restaurante restaurante;
+	
+	  @JsonIgnore	  
+	  @ManyToOne//(fetch = FetchType.LAZY)	  
+	  @JoinColumn(name = "restaurante_id") 
+	  private Restaurante restaurante;
+	 
 	
 	}
