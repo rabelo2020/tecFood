@@ -60,7 +60,7 @@ public class Restaurante {
 	@UpdateTimestamp
 	private LocalDateTime dataAtualizacao;
 
-	//@JsonIgnore
+	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 
@@ -68,7 +68,7 @@ public class Restaurante {
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 
-	//@JsonIgnore
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formaPagamento = new ArrayList<>();
