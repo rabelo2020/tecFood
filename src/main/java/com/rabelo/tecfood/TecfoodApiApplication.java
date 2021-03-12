@@ -10,7 +10,7 @@ import com.rabelo.tecfood.domain.repository.teste.CustomJpaRepository;
 @SpringBootApplication
 @EnableJpaRepositories(repositoryBaseClass = CustomJpaRepositoryImpl.class)
 public class TecfoodApiApplication {
-
+//Teste
 	public static void main(String[] args) {
 		SpringApplication.run(TecfoodApiApplication.class, args);
 	}
