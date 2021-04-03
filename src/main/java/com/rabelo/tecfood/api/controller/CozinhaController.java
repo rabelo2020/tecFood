@@ -3,6 +3,8 @@ package com.rabelo.tecfood.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,8 +29,8 @@ import com.rabelo.tecfood.domain.service.exception.EntidadeJaCadastradaException
 import com.rabelo.tecfood.domain.service.exception.EntidadeNaoEncontradaException;
 
 @RestController
-@RequestMapping(value = "/cozinhas",
-produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/cozinhas")
+//,produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 public class CozinhaController {
 
 	@Autowired
@@ -59,7 +61,7 @@ public class CozinhaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha salvar(@RequestBody Cozinha cozinha) {
+	public Cozinha salvar(@RequestBody @Valid Cozinha cozinha) {
 		return cadastrocozinhaService.salva(cozinha);
 
 		/*

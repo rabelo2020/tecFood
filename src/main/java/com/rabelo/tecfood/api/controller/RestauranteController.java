@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl.TransactionDriverControlImpl;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabelo.tecfood.Grups;
 import com.rabelo.tecfood.domain.model.Restaurante;
 import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.service.CadastroRestauranteService;
@@ -63,7 +66,7 @@ public class RestauranteController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante salvar(@RequestBody Restaurante restaurante) {
+	public Restaurante salvar(@RequestBody @Validated(Grups.CadastroRestaurante.class) Restaurante restaurante) {
 		
 		try {
 			return cadastroRestauranteService.salvar(restaurante);
@@ -98,35 +101,6 @@ public class RestauranteController {
 		return atualizar(id, restauranteAtual);
 	}
 
-	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteDestino, HttpServletRequest request) {
-		ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(request);
-		try {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-
-		//Converter todas as propiedades camposRestaurante, no tipo de cada campo de Restaurante.class 
-				Restaurante restauranteOrigem = objectMapper.convertValue(camposRestaurante, Restaurante.class);
-				
-				camposRestaurante.forEach((nomeCampo, valorCampo) -> {
-					
-					/* Busca o nome da Propiedade em nomeCampo */
-				Field field = ReflectionUtils.findField(Restaurante.class, nomeCampo);
-					/* Habilitando o field "campo" q está como private para, acessivel */
-				field.setAccessible(true);
-				
-		/* Buscar ou  faz um "get" em restauranteOrigem, referente ao valor do field, e setar o valor no campo field */
-				Object novoValorCampo = ReflectionUtils.getField(field, restauranteOrigem);			
-					
-					//  Atribui um valor na Propiedade campo "field", no objeto, restauranteDestino o valor "novoValorCampo" 
-					 ReflectionUtils.setField(field, restauranteDestino, novoValorCampo);			
-			
-		});
-		}catch (IllegalArgumentException e) {
-            Throwable rootCause = ExceptionUtils.getRootCause(e);
-            throw new HttpMessageNotReadableException(e.getMessage(), rootCause, httpRequest);
-		}
-	}
 
 	@PutMapping("/{id}")
 	public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restauranteClient) {
@@ -177,5 +151,36 @@ cadastroRestauranteService.excluir(id);
 		 * 
 		 * return ResponseEntity.notFound().build();
 		 */	}
+	
+
+	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteDestino, HttpServletRequest request) {
+		ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(request);
+		try {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+
+		//Converter todas as propiedades camposRestaurante, no tipo de cada campo de Restaurante.class 
+				Restaurante restauranteOrigem = objectMapper.convertValue(camposRestaurante, Restaurante.class);
+				
+				camposRestaurante.forEach((nomeCampo, valorCampo) -> {
+					
+					/* Busca o nome da Propiedade em nomeCampo */
+				Field field = ReflectionUtils.findField(Restaurante.class, nomeCampo);
+					/* Habilitando o field "campo" q está como private para, acessivel */
+				field.setAccessible(true);
+				
+		/* Buscar ou  faz um "get" em restauranteOrigem, referente ao valor do field, e setar o valor no campo field */
+				Object novoValorCampo = ReflectionUtils.getField(field, restauranteOrigem);			
+					
+					//  Atribui um valor na Propiedade campo "field", no objeto, restauranteDestino o valor "novoValorCampo" 
+					 ReflectionUtils.setField(field, restauranteDestino, novoValorCampo);			
+			
+		});
+		}catch (IllegalArgumentException e) {
+            Throwable rootCause = ExceptionUtils.getRootCause(e);
+            throw new HttpMessageNotReadableException(e.getMessage(), rootCause, httpRequest);
+		}
+	}
 
 }

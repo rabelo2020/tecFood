@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,32 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	public static final String MSG_ERRO_GNERICA_USUARIO_FINAL= "Orreu um erro interno inesperado no sistema. "
 			+ "Tente novamente e se o problema persistir, entre em contato " + "com o administrador do sistema.";
+	
+	//Tratando erro de uma Propiedade, onde ela esteja como @NotNull, e vc não está enviado 
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos estão inválidos."
+				+ " Faça o preenchimento correto e tente novamente.";
+BindingResult  bindingResult= ex.getBindingResult();
+
+		List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
+				.map(fieldError -> Problem.Field.builder()
+						.name(fieldError.getField())
+						.userMessage(fieldError.getDefaultMessage())
+						.build())
+				    .collect(Collectors.toList());
+		
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMassage(detail)
+				.fields(problemFields)
+				.build();
+		
+		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
+	
 	
 //Capturar todos erros não tratados de maneira mais espercifico
 //Metodo para tratar Erro de maneira mais Generica
