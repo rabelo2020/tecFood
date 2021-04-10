@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,23 +17,23 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.rabelo.tecfood.Grups;
+import com.rabelo.tecfood.core.validation.Grups;
+import com.rabelo.tecfood.core.validation.Multiplo;
+import com.rabelo.tecfood.core.validation.ValorZeroIncluiDescricao;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@ValorZeroIncluiDescricao(valorField="taxaFrete", descricaoField="nome", descricaoObrigatoria="Frete Grátis")
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -45,19 +44,22 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	//@NotNull
-	@NotBlank(groups = Grups.CadastroRestaurante.class)
+
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 
-	//@DecimalMin("3")
-	@PositiveOrZero(groups = Grups.CadastroRestaurante.class)
+	@NotNull
+	//@PositiveOrZero//(groups = Grups.CozinhaId.class)
+	//@TaxaFrete
+	@Multiplo(numero=3)
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
 	// @JsonIgnore
 	//@JsonIgnoreProperties("hibernateLazyInitializer")
-	@NotNull(groups = Grups.CadastroRestaurante.class)
+	@NotNull//(groups = Grups.CadastroRestaurante.class)
+	@ConvertGroup(from = Default.class, to = Grups.CozinhaId.class)
 	@Valid
 	@ManyToOne // (fetch = FetchType.LAZY)
 	@JoinColumn(name = "cozinha_id", nullable = false)

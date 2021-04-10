@@ -37,7 +37,7 @@ public class CadastroEstadoService {
 
 	public void existeEstado(String nome) {
 
-		boolean estado = estadoRepository.existsByNome(nome);
+		boolean estado = estadoRepository.existsByNome(nome.trim());
 		if (estado) {
 			throw new EntidadeJaCadastradaException(String.format(MSG_ESTADO_ESTA_CADASTRADA, nome.toUpperCase()));
 		}
