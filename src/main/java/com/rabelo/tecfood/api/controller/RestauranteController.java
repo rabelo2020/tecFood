@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabelo.tecfood.core.validation.ValidacaoException;
 import com.rabelo.tecfood.domain.model.Restaurante;
 import com.rabelo.tecfood.domain.repository.RestauranteRepository;
 import com.rabelo.tecfood.domain.service.CadastroRestauranteService;
@@ -39,6 +42,9 @@ import com.rabelo.tecfood.domain.service.exception.NegocioException;
                , produces = {MediaType.APPLICATION_JSON_VALUE})
 public class RestauranteController {
 
+	@Autowired
+	private SmartValidator smartValidator;
+	
 	@Autowired
 	private RestauranteRepository restauranteRepository;
 
@@ -87,17 +93,6 @@ public class RestauranteController {
 		 */
 		
 	}
-
-	@PatchMapping("/{id}")
-	public Restaurante atualizarParcial(@PathVariable Long id,
-			@RequestBody Map<String, Object> camposRestaurante, HttpServletRequest request) {
-
-		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
-
-		merge(camposRestaurante, restauranteAtual, request);
-		return atualizar(id, restauranteAtual);
-	}
-
 
 	@PutMapping("/{id}")
 	public Restaurante atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restauranteClient) {
@@ -148,7 +143,30 @@ cadastroRestauranteService.excluir(id);
 		 * 
 		 * return ResponseEntity.notFound().build();
 		 */	}
-	
+
+	@PatchMapping("/{id}")
+	public Restaurante atualizarParcial(@PathVariable Long id,
+			@RequestBody Map<String, Object> camposRestaurante, HttpServletRequest request) {
+
+		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
+
+		merge(camposRestaurante, restauranteAtual, request);
+		validate(restauranteAtual, "restaurante");
+		return atualizar(id, restauranteAtual);
+	}
+
+
+	private void validate(Restaurante restaurante, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+       smartValidator.validate(restaurante, bindingResult);
+       
+       if (bindingResult.hasErrors()) {
+    	   throw new ValidacaoException(bindingResult);
+		
+	}
+		
+		
+	}
 
 	private void merge(Map<String, Object> camposRestaurante, Restaurante restauranteDestino, HttpServletRequest request) {
 		ServletServerHttpRequest httpRequest = new ServletServerHttpRequest(request);
