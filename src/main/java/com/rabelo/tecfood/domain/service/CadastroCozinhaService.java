@@ -62,7 +62,7 @@ public class CadastroCozinhaService {
 
 		} catch (DataIntegrityViolationException e) {
 
-			throw new CozinhaNaoEncontradaException(String.format(MSG_COZINHA_ESTA_EM_USO, id));
+			throw new EntidadeEmUsoException(String.format(MSG_COZINHA_ESTA_EM_USO, id));
 
 		}
 	}

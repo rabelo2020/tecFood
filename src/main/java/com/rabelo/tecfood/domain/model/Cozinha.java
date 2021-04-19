@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +30,7 @@ public class Cozinha {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@NotBlank	
+	@NotEmpty
 	@Column(nullable=false)
 	private String nome;
 	

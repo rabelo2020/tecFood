@@ -38,6 +38,7 @@ public class TestesController {
 
 		return restaurantesRepository.buscarPrimeiro();
 	}
+	//UPPER(name) =UPPER(name)
 
 	@GetMapping("/buscar-com-frete-gratis")
 	public List<Restaurante> restauranteComFreteGratis(String nome) {
