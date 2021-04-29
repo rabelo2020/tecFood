@@ -30,6 +30,7 @@ public class CadastroCozinhaIT {
 	
 	@BeforeEach
 	void setup() {
+		//verificar os logs no Console
 		enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath="/cozinhas";
@@ -73,7 +74,7 @@ public class CadastroCozinhaIT {
   .then()
  // .body("nome", Matchers.hasSize(4))
   .body("",hasSize(6));
-
+  //Comparar os Dados 
   //.body("nome", hasItems("Indiana", "Cearense", "Japonesa","Americana"));
 				
 	   
