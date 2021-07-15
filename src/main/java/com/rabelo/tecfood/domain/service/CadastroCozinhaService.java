@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
@@ -19,15 +20,14 @@ public class CadastroCozinhaService {
 
 	private static final String MSG_COZINHA_ESTA_EM_USO = "Cozinha de código %d não pode ser removida, pois está em uso";
 	private static final String MSG_COZINHA_JA_CADASTRADA = "COZINHA DE NOME %s JÁ CADASTRADA !";
-		
-	
+
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
+	@Transactional
 	public Cozinha salva(Cozinha cozinha) {
-		 existeCozinha(cozinha.getNome());
-		 return cozinhaRepository.save(cozinha);
-		
+		existeCozinha(cozinha.getNome());
+		return cozinhaRepository.save(cozinha);
 		/*
 		 * Cozinha cozinhaAtual = cozinhaRepository.findByNome(cozinha.getNome());
 		 * 
@@ -37,19 +37,8 @@ public class CadastroCozinhaService {
 		 * return cozinhaRepository.save(cozinha);
 		 */
 	}
-	
-	
-	public void existeCozinha(String nome) {
-		boolean cozinha = cozinhaRepository.existsByNome(nome.trim());
 
-		if (cozinha) {
-
-			throw new CozinhaNaoEncontradaException(String.format(MSG_COZINHA_JA_CADASTRADA, nome.toUpperCase()));
-		}
-
-	}
-
-
+	@Transactional
 	public void excluir(Long id) {
 
 		try {
@@ -67,9 +56,18 @@ public class CadastroCozinhaService {
 		}
 	}
 
-	public Cozinha buscarOuFalhar(Long cozinhaId) {		
-		return cozinhaRepository.findById(cozinhaId).orElseThrow(() -> 
-		new CozinhaNaoEncontradaException(cozinhaId));
+	public Cozinha buscarOuFalhar(Long cozinhaId) {
+		return cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
+	}
+
+	public void existeCozinha(String nome) {
+		boolean cozinha = cozinhaRepository.existsByNome(nome.trim());
+
+		if (cozinha) {
+
+			throw new CozinhaNaoEncontradaException(String.format(MSG_COZINHA_JA_CADASTRADA, nome.toUpperCase()));
+		}
+
 	}
 
 }

@@ -3,6 +3,7 @@ package com.rabelo.tecfood.domain.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rabelo.tecfood.domain.model.Produto;
 import com.rabelo.tecfood.domain.model.Restaurante;
@@ -25,6 +26,7 @@ public class CadastroProdutoService {
 	@Autowired
 	private CadastroRestauranteService cadastroRestauranteService;
 
+	@Transactional
 	public Produto salvar(Produto produto) {
 		//Long restauranteId = produto.getRestaurante().getId();
 		//existeProduto(produto.getNome());
@@ -43,7 +45,7 @@ public class CadastroProdutoService {
 
 	}
 	
-
+@Transactional
 	public void excluir(Long id) {
 		Produto produto = buscarOuFalhar(id);
 		

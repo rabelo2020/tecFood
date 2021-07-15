@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rabelo.tecfood.domain.model.Estado;
 import com.rabelo.tecfood.domain.repository.EstadoRepository;
@@ -22,6 +23,7 @@ public class CadastroEstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
+	@Transactional
 	public Estado salvar(Estado estado) {
 		existeEstado(estado.getNome());
 
@@ -51,6 +53,7 @@ public class CadastroEstadoService {
 
 	}
 
+	@Transactional
 	public void excluir(Long id) {
 		try {
 			Estado estado = buscarOuFalhar(id);

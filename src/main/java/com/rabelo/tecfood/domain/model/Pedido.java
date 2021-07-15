@@ -2,6 +2,7 @@ package com.rabelo.tecfood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,16 +44,16 @@ public class Pedido {
 	
 	@CreationTimestamp
 	@Column(name = "data_criacao", columnDefinition = "datetime")
-	private LocalDateTime dataCriacao;
+	private OffsetDateTime dataCriacao;
 	
 	@Column(name = "data_confirmacao", columnDefinition = "datetime")
-	private LocalDateTime dataConfirmacao;
+	private OffsetDateTime dataConfirmacao;
 	
 	@Column(name = "data_cancelamento", columnDefinition = "datetime")
-	private LocalDateTime dataCancelamento;
+	private OffsetDateTime dataCancelamento;
 	
 	@Column(name = "data_entrega", columnDefinition = "datetime")
-	private LocalDateTime dataEntrega;
+	private OffsetDateTime dataEntrega;
 	
 	@Embedded
 	private Endereco enderecoEntrega;

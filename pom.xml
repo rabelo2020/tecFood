@@ -65,8 +65,11 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.fasterxml.jackson.dataformat</groupId> <artifactId>jackson-dataformat-xml</artifactId> 
-			</dependency> -->
+		<!-- <dependency> 
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			 <artifactId>jackson-dataformat-xml</artifactId>
+			 Consumir no formato XML 
+		</dependency> -->
 
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -82,6 +85,13 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.4.2</version>
+		</dependency>
+		
 
 		<!-- Dependencia no uso de Teste -->
 		<dependency>

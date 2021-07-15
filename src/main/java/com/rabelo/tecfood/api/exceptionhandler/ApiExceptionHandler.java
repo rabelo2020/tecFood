@@ -1,6 +1,6 @@
 package com.rabelo.tecfood.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,8 +52,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ ValidacaoException.class })
 	public ResponseEntity<Object> handleValidacaoException(ValidacaoException ex, WebRequest request) {
-
-		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		
+return handleValidationInternal(new Exception() ,ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		//return handleValidationInternal(ex.getBindingResult(), new HttpHeaders(), 
+		//HttpStatus.BAD_REQUEST, request);
 	}
 
 	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult,
@@ -182,7 +184,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ EntidadeNaoEncontradaException.class })
 	public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex,
 			WebRequest request) {
-
+	
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCOTRADA;
 		String detail = ex.getMessage();
@@ -198,7 +200,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 
 		/*
-		 * Problema problema = Problema.builder() .dataHora(LocalDateTime.now())
+		 * Problema problema = Problema.builder() .dataHora(OffsetDateTimeTime.now())
 		 * .mensagem(e.getMessage()) .build(); return
 		 * ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
 		 */
@@ -217,7 +219,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		// return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
 		// HttpStatus.BAD_REQUEST, request);
 		/*
-		 * Problema problema = Problema.builder() .dataHora(LocalDateTime.now())
+		 * Problema problema = Problema.builder() .dataHora(OffsetDateTimeTime.now())
 		 * .mensagem(e.getMessage()) .build(); return
 		 * ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
 		 */
@@ -236,7 +238,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		// return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(),
 		// HttpStatus.CONFLICT, request);
 		/*
-		 * Problema problema = Problema.builder() .dataHora(LocalDateTime.now())
+		 * Problema problema = Problema.builder() .dataHora(OffsetDateTimeTime.now())
 		 * .mensagem(e.getMessage()).build();
 		 * 
 		 * return ResponseEntity.status(HttpStatus.CONFLICT) .body(problema);
@@ -248,11 +250,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpStatus status, WebRequest request) {
 
 		if (body == null) {
-			body = Problem.builder().timestamp(LocalDateTime.now()).title(status.getReasonPhrase())
+			body = Problem.builder().timestamp(OffsetDateTime.now()).title(status.getReasonPhrase())
 					.status(status.value()).userMassage(MSG_ERRO_GNERICA_USUARIO_FINAL).build();
 
 		} else if (body instanceof String) {
-			body = Problem.builder().timestamp(LocalDateTime.now()).title((String) body).status(status.value())
+			body = Problem.builder().timestamp(OffsetDateTime.now()).title((String) body).status(status.value())
 					.userMassage(MSG_ERRO_GNERICA_USUARIO_FINAL).build();
 		}
 		return super.handleExceptionInternal(ex, body, headers, status, request);
@@ -260,7 +262,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
 
-		return Problem.builder().timestamp(LocalDateTime.now()).status(status.value()).type(problemType.getUri())
+		return Problem.builder().timestamp(OffsetDateTime.now()).status(status.value()).type(problemType.getUri())
 				.title(problemType.getTitle()).detail(detail);
 	}
 

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.service.CadastroCozinhaService;
@@ -14,6 +15,7 @@ import com.rabelo.tecfood.domain.service.exception.EntidadeEmUsoException;
 
 
 @SpringBootTest()
+@TestPropertySource("application-test.properties")
 class CadastroCozinhasIT {
 	@Autowired
 	private CadastroCozinhaService cozinhaService;

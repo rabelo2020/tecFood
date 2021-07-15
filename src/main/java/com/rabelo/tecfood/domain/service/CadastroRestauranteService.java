@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rabelo.tecfood.domain.model.Cozinha;
 import com.rabelo.tecfood.domain.model.Restaurante;
@@ -44,7 +45,7 @@ public class CadastroRestauranteService {
 	 * 
 	 * return restauranteAtual; }
 	 */
-
+	@Transactional
 	public Restaurante salvar(Restaurante restaurante) {
 
 		Long cozinhaId = restaurante.getCozinha().getId();
@@ -59,6 +60,7 @@ public class CadastroRestauranteService {
 		return restauranteRepository.findById(id).orElseThrow(() -> new RestauranteNaoEncontradaException(id));
 	}
 
+	@Transactional
 	public void excluir(Long id) {
 		try {
 			restauranteRepository.deleteById(id);

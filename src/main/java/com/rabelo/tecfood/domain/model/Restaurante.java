@@ -1,7 +1,7 @@
 package com.rabelo.tecfood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +26,7 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rabelo.tecfood.core.validation.Grups;
-import com.rabelo.tecfood.core.validation.Multiplo;
 import com.rabelo.tecfood.core.validation.ValorZeroIncluiDescricao;
 
 import lombok.Data;
@@ -57,8 +55,7 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
-	// @JsonIgnore
-	//@JsonIgnoreProperties("hibernateLazyInitializer")
+	
 	@NotNull//(groups = Grups.CadastroRestaurante.class)
 	@ConvertGroup(from = Default.class, to = Grups.CozinhaId.class)
 	@Valid
@@ -66,25 +63,20 @@ public class Restaurante {
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
 
-	@JsonIgnore
 	@Column(nullable = false, columnDefinition = "datetime")
 	@CreationTimestamp
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 
-	@JsonIgnore
 	@Column(nullable = false, columnDefinition = "datetime")
 	@UpdateTimestamp
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", joinColumns = @JoinColumn(name = "restaurante_id"), inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formaPagamento = new ArrayList<>();

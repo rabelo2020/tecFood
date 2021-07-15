@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rabelo.tecfood.domain.model.FormaPagamento;
 import com.rabelo.tecfood.domain.repository.FormaPagamentoRepository;
@@ -23,6 +24,7 @@ public class CadastroFormaPagamentoService {
 	@Autowired
 	private FormaPagamentoRepository formaPagamentoRepository;
 
+	@Transactional
 	public FormaPagamento salvar(FormaPagamento formaPagamento) {
 
 		existeFormaPagamento(formaPagamento.getNome());
@@ -38,11 +40,12 @@ public class CadastroFormaPagamentoService {
 	}
 
 	private void existeFormaPagamento(String nome) {
-	boolean pagamento =	formaPagamentoRepository.existsByNome(nome);
-	if (pagamento) {
-		throw new EntidadeJaCadastradaException(String.format("Forma de Pagamento, %s já Cadastrado !", nome.toUpperCase()));
-	}
-		
+		boolean pagamento = formaPagamentoRepository.existsByNome(nome);
+		if (pagamento) {
+			throw new EntidadeJaCadastradaException(
+					String.format("Forma de Pagamento, %s já Cadastrado !", nome.toUpperCase()));
+		}
+
 	}
 
 	public FormaPagamento atualizarFormaPagamento(Long id, FormaPagamento formaPagamento) {
@@ -60,10 +63,11 @@ public class CadastroFormaPagamentoService {
 		return pagamentoAtual;
 	}
 
+	@Transactional
 	public void excluir(Long id) {
 		FormaPagamento formaPagamento = buscarOuFalhar(id);
 		String nome = formaPagamento.getNome();
-		
+
 		try {
 
 			formaPagamentoRepository.delete(formaPagamento);
@@ -73,7 +77,7 @@ public class CadastroFormaPagamentoService {
 			throw new EntidadeEmUsoException(String.format(FORMA_DE_PAGAMENTO_ESTA_SENDO_UTILIZADA, nome));
 
 		}
-		
+
 		/*
 		 * FormaPagamento formaPagamento =
 		 * formaPagamentoRepository.findById(id).orElse(null);
@@ -93,9 +97,9 @@ public class CadastroFormaPagamentoService {
 	}
 
 	public FormaPagamento buscarOuFalhar(Long id) {
-		
-		return formaPagamentoRepository.findById(id).orElseThrow(() ->
-		  new FormaPagamentoNaoEncontradaException(String.format(FORMA_DE_PAGAMENTO_NAO_EXISTE, id)));
+
+		return formaPagamentoRepository.findById(id).orElseThrow(
+				() -> new FormaPagamentoNaoEncontradaException(String.format(FORMA_DE_PAGAMENTO_NAO_EXISTE, id)));
 	}
 
 }

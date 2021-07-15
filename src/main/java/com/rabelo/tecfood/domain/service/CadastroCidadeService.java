@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.rabelo.tecfood.domain.model.Cidade;
 import com.rabelo.tecfood.domain.model.Estado;
@@ -29,6 +30,7 @@ public class CadastroCidadeService {
 	@Autowired
 	private CadastroEstadoService cadastroEstadoService;
 
+	@Transactional
 	public Cidade salvar(Cidade cidade) {
 		
 		Long estadoId = cidade.getEstado().getId();
@@ -51,7 +53,7 @@ public class CadastroCidadeService {
 		 */
 
 	}
-
+    @Transactional
 	public Cidade atualizar(Long id, Cidade cidade) {
 		Cidade cidadeAtual = buscarCidadeId(id);
 
@@ -69,6 +71,7 @@ public class CadastroCidadeService {
 		return cidadeAtual;
 	}
 
+	@Transactional
 	public void excluir(Long cidadeId) {
 		try {
 			cidadeRepository.deleteById(cidadeId);
